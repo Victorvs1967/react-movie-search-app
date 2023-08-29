@@ -20,14 +20,15 @@ export const reducer = (state, action) => {
             return {
                 ...state,
                 loading: false,
-                movies: action.payload
+                movies: action.payload,
+                tv: action.tv,
             };
         case 'SEARCH_MOVIES_FAILURE':
             return {
                 ...state,
                 loading: true,
                 errorMessage: action.error
-            };        
+            };
         case 'MOVIE_DETAILS_REQUEST':
             return {
                 ...state,

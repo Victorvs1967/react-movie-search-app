@@ -9,7 +9,7 @@ import { reducer, initialState } from './reducer';
 
 const App = () => {
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [ state, dispatch ] = useReducer(reducer, initialState);
 
   const fetchMovies = search => {
     dispatch({
@@ -47,19 +47,21 @@ const App = () => {
 
   const fetchPopularTV = () => {
     dispatch({
-      type: 'SEARCH_MOVIES_REQUEST'
+      type: 'SEARCH_TV_REQUEST',
+      tv: true
     });
 
     fetch(API_DETAILS_TV_URL.concat('popular?', API_KEY, '&', API_PARAMS))
       .then(response => response.json())
       .then(result => dispatch({
         type: 'SEARCH_MOVIES_SUCCESS',
-        payload: result.results
+        payload: result.results,
+        tv: true
       }))
       .catch(error => dispatch({
         type: 'SEARCH_MOVIES_FAILURE',
         error: error
-      }))
+      }));
   };
 
   useEffect(() => fetchPopular(), [])
@@ -80,7 +82,7 @@ const App = () => {
           <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
             {errorMessage ?
               <h2 style={{ textAlign: 'center', margin: 'auto', color: 'red' }}>Fetch error: {errorMessage}</h2> :
-              movies.map(movie => <Movie movie={movie} key={movie.id} />)}
+              movies.map(movie => <Movie movie={ movie } key={movie.id} />)}
           </div>
         }
       </div>
