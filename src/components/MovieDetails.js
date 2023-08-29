@@ -1,9 +1,9 @@
 import { API_IMG_URL, DEFAULT_PLACEHOLDER_IMAGE } from '../Const';
 
 const MovieDetails = ({ details }) => {
-    
+
     const { overview, poster_path, release_date, title } = details;
-    const poster = poster_path === null ? DEFAULT_PLACEHOLDER_IMAGE : `${API_IMG_URL}${poster_path}`
+    const poster = poster_path === null ? DEFAULT_PLACEHOLDER_IMAGE : API_IMG_URL.concat(poster_path);
 
     return (
         <div className="card mx-0">

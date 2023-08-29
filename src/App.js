@@ -50,7 +50,7 @@ const App = () => {
       type: 'SEARCH_MOVIES_REQUEST'
     });
 
-    fetch(`${API_DETAILS_TV_URL}popular?${API_KEY}&${API_PARAMS}`)
+    fetch(API_DETAILS_TV_URL.concat('popular?', API_KEY, '&', API_PARAMS))
       .then(response => response.json())
       .then(result => dispatch({
         type: 'SEARCH_MOVIES_SUCCESS',
@@ -77,7 +77,7 @@ const App = () => {
         <h2 className="text-center my-5">Movies List</h2>
         {loading && !errorMessage ?
           <div className="row justify-content-center mt-5"><Loader /></div> :
-          <div className="row row-cols-1 row-cols-md-2 row-cols-md-3 row-cols-md-4 g-4">
+          <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
             {errorMessage ?
               <h2 style={{ textAlign: 'center', margin: 'auto', color: 'red' }}>Fetch error: {errorMessage}</h2> :
               movies.map(movie => <Movie movie={movie} key={movie.id} />)}

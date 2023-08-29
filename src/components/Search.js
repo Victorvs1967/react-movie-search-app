@@ -20,11 +20,9 @@ const Search = ({ fetchMovies }) => {
     }
 
     return (
-        <form role='search' onSubmit={handleSubmit}>
-            <div className="form-group d-flex gap-2">
-                <input type="text" name="search" placeholder="Search movie" className="form-control"  onChange={handleSearchChange} />
-                <button type="submit" className="btn btn-primary ml-2"><i className="fa fa-search" aria-hidden="true"></i></button>
-            </div>
+        <form className="form-group d-flex gap-2" role='search' onSubmit={handleSubmit}>
+            <input type="text" name="search" placeholder="Search movie" className="form-control"  onChange={handleSearchChange} />
+            <button type="submit" className="btn btn-primary ml-2"><i className="fa fa-search" aria-hidden="true"></i></button>
         </form>
     );
 }
