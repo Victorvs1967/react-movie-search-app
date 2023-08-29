@@ -1,24 +1,90 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useReducer, useEffect } from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import Header from "./components/Header";
+import Movie from './components/Movie';
+import Loader from './components/Loader';
 
-function App() {
+import { API_DETAILS_URL, API_DETAILS_TV_URL, API_KEY, API_PARAMS, API_SEARCH_URL } from './Const';
+import { reducer, initialState } from './reducer';
+
+const App = () => {
+
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const fetchMovies = search => {
+    dispatch({
+      type: 'SEARCH_MOVIES_REQUEST'
+    });
+
+    fetch(API_SEARCH_URL.concat(search))
+      .then(response => response.json())
+      .then(result => dispatch({
+        type: 'SEARCH_MOVIES_SUCCESS',
+        payload: result.results
+      }))
+      .catch(error => dispatch({
+        type: 'SEARCH_MOVIES_FAILURE',
+        error: error
+      }))
+  };
+
+  const fetchPopular = () => {
+    dispatch({
+      type: 'SEARCH_MOVIES_REQUEST'
+    });
+
+    fetch(API_DETAILS_URL.concat('popular?', API_KEY, '&', API_PARAMS))
+      .then(response => response.json())
+      .then(result => dispatch({
+        type: 'SEARCH_MOVIES_SUCCESS',
+        payload: result.results
+      }))
+      .catch(error => dispatch({
+        type: 'SEARCH_MOVIES_FAILURE',
+        error: error
+      }))
+  };
+
+  const fetchPopularTV = () => {
+    dispatch({
+      type: 'SEARCH_MOVIES_REQUEST'
+    });
+
+    fetch(`${API_DETAILS_TV_URL}popular?${API_KEY}&${API_PARAMS}`)
+      .then(response => response.json())
+      .then(result => dispatch({
+        type: 'SEARCH_MOVIES_SUCCESS',
+        payload: result.results
+      }))
+      .catch(error => dispatch({
+        type: 'SEARCH_MOVIES_FAILURE',
+        error: error
+      }))
+  };
+
+  useEffect(() => fetchPopular(), [])
+
+  const { movies, errorMessage, loading } = state;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className="container px-0 py-4">
+        <Header
+          fetchMovies={fetchMovies}
+          fetchPopular={fetchPopular}
+          fetchPopularTV={fetchPopularTV}
+        />
+        <h2 className="text-center my-5">Movies List</h2>
+        {loading && !errorMessage ?
+          <div className="row justify-content-center mt-5"><Loader /></div> :
+          <div className="row row-cols-1 row-cols-md-2 row-cols-md-3 row-cols-md-4 g-4">
+            {errorMessage ?
+              <h2 style={{ textAlign: 'center', margin: 'auto', color: 'red' }}>Fetch error: {errorMessage}</h2> :
+              movies.map(movie => <Movie movie={movie} key={movie.id} />)}
+          </div>
+        }
+      </div>
+    </BrowserRouter>
   );
 }
 
